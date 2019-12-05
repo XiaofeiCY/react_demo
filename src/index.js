@@ -49,9 +49,8 @@ class Board extends React.Component {
 
   renderSquare(i) {
     // return <Square value={i += 1} />;
-    return <Square highlight={this.props.line && this.props.line.includes(i)} value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
+    return <Square key={i.toString()} highlight={this.props.line && this.props.line.includes(i)} value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
   }
-
   // handleClick(i) {
   //   // 这里不直接对源数据进行处理的好处：1、简化复杂功能 2、追踪数据变化 3、确定在react中何时重新渲染
   //   const squares =this.state.squares.slice()
@@ -80,7 +79,7 @@ class Board extends React.Component {
       for (let temp = 3 * index; temp < 3 * index + 3; temp++) {
         item.push(this.renderSquare(temp))
       }
-      list.push(<div className="board-row" key={index}>{item}</div>)
+      list.push(<div className="board-row" key={index.toString()}>{item}</div>)
     }
 
     return (
@@ -117,10 +116,14 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      countNum: 0
     }
   }
 
   handleClick(i) {
+    // this.setState({
+    //   countNum: this.state.countNum +=1
+    // })
     const history = this.state.history.slice(0, this.state.stepNumber + 1)
     const current = history[history.length - 1]
     // 这里不直接对源数据进行处理的好处：1、简化复杂功能 2、追踪数据变化 3、确定在react中何时重新渲染
@@ -156,6 +159,14 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: (step % 2 === 0)
     })
+  }
+  handleChange(e) {
+    this.setState({
+      countNum: e.target.value
+    })
+    console.log('====================================');
+    console.log(this.state.countNum);
+    console.log('====================================');
   }
 
   render() {
@@ -196,6 +207,12 @@ class Game extends React.Component {
           <div>{status}</div>
           <ol>{moves}</ol>
         </div>
+        <form>
+          <label>
+            名字:
+            <input type="text" value={this.state.countNum} onChange={(e) => {this.handleChange(e)}} />
+          </label>
+        </form>
       </div>
     );
   }
